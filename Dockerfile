@@ -6,7 +6,9 @@ MAINTAINER  Jessica Stokes <hello@jessicastokes.net>
 WORKDIR     /tmp/workdir
 
 RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends ffmpegfs && \
+        apt-get install -yq --no-install-recommends \
+            ffmpegfs \
+            fuse && \
         apt-get autoremove -y && \
         apt-get clean -y
 
