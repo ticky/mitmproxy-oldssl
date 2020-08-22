@@ -25,10 +25,11 @@ RUN      buildDeps="g++ \
                     bc" && \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
-%%RUN%%
 
-RUN     curl -L -O "https://github.com/nschlia/ffmpegfs/releases/download/v1.99/ffmpegfs-1.99.tar.gz" && \
-        tar xvfz "ffmpegfs-1.99.tar.gz" && \
+ENV         FFMPEGFS_VERSION=1.99
+
+RUN     curl -sLO https://github.com/nschlia/ffmpegfs/releases/download/v1.99/ffmpegfs-${FFMPEGFS_VERSION}.tar.gz && \
+        tar xvfz "ffmpegfs-${FFMPEGFS_VERSION}.tar.gz" && \
         cd ffmpegfs-1.99 && \
         ./configure && \
         make && \
