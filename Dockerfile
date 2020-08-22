@@ -26,7 +26,8 @@ RUN      buildDeps="g++ \
         apt-get -yqq update && \
         apt-get install -yq --no-install-recommends ${buildDeps}
 
-ENV         FFMPEGFS_VERSION=1.99
+ENV         FFMPEGFS_VERSION=1.99 \
+            PKG_CONFIG_PATH=/usr/local/lib
 
 RUN     curl -sLO https://github.com/nschlia/ffmpegfs/releases/download/v1.99/ffmpegfs-${FFMPEGFS_VERSION}.tar.gz && \
         tar xvfz "ffmpegfs-${FFMPEGFS_VERSION}.tar.gz" && \
