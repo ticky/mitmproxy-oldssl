@@ -12,7 +12,7 @@ RUN apk add curl perl && \
 
 # OpenSSL configuration borrowed from Alpine's own package https://git.alpinelinux.org/aports/tree/main/openssl/APKBUILD
 RUN cd "openssl-${OPENSSL_VERSION}" && \
-    ./Configure \
+    ./config \
       --prefix=/usr \
       --libdir=lib \
       --openssldir=/etc/ssl \
