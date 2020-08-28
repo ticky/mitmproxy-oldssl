@@ -8,7 +8,7 @@ ENV OPENSSL_VERSION=1.1.1g
 RUN apk --no-cache add --virtual .build-dependencies linux-headers build-base curl perl && \
     curl -sLO https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
     tar xvfz "openssl-${OPENSSL_VERSION}.tar.gz" && \
-    apk del openssl
+    apk del openssl libssl libcrypto
 
 # OpenSSL configuration borrowed from Alpine's own package https://git.alpinelinux.org/aports/tree/main/openssl/APKBUILD
 RUN cd "openssl-${OPENSSL_VERSION}" && \
@@ -21,9 +21,12 @@ RUN cd "openssl-${OPENSSL_VERSION}" && \
       no-sm2 no-sm4 enable-ssl2 enable-ssl3 no-seed \
       no-weak-ssl-ciphers -Wa,--noexecstack && \
     make && \
-    make install
+    make install_sw
 
-RUN apk del .build-dependencies
+WORKDIR /
+
+RUN apk del .build-dependencies && \
+    rm -rf /tmp/workdir
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
