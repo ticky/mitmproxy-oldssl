@@ -5,7 +5,8 @@ WORKDIR /tmp/workdir
 
 ENV OPENSSL_VERSION=1.1.1g
 
-RUN curl -sLO https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
+RUN apk add curl && \
+    curl -sLO https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
     tar xvfz "openssl-${OPENSSL_VERSION}.tar.gz" && \
     cd "openssl-${OPENSSL_VERSION}" && \
     apk del openssl
