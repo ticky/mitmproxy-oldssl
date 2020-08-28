@@ -5,7 +5,7 @@ WORKDIR /tmp/workdir
 
 ENV OPENSSL_VERSION=1.1.1g
 
-RUN apk add build-base curl perl && \
+RUN apk --no-cache add --virtual .build-dependencies build-base curl perl && \
     curl -sLO https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
     tar xvfz "openssl-${OPENSSL_VERSION}.tar.gz" && \
     apk del openssl
@@ -22,6 +22,8 @@ RUN cd "openssl-${OPENSSL_VERSION}" && \
       no-weak-ssl-ciphers -Wa,--noexecstack && \
     make && \
     make install
+
+RUN apk del .build-dependencies
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
