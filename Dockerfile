@@ -11,6 +11,9 @@ RUN apk --no-cache add --virtual .build-dependencies linux-headers build-base cu
     apk del openssl
 
 # OpenSSL configuration borrowed from Alpine's own package https://git.alpinelinux.org/aports/tree/main/openssl/APKBUILD
+# Modified to add:
+#  - enable-ssl3 and enable-ssl3-method (both are needed for any of ssl3 compatibility to be present)
+#  - enable-weak-ssl-ciphers (this enables RC4 ciphers, necessary for very early SSL3 implementations; https://www.openssl.org/docs/man1.1.1/man1/ciphers.html)
 RUN cd "openssl-${OPENSSL_VERSION}" && \
     ./config \
       --prefix=/usr \
@@ -18,7 +21,7 @@ RUN cd "openssl-${OPENSSL_VERSION}" && \
       --openssldir=/etc/ssl \
       shared no-zlib \
       no-async no-comp enable-ssl3 enable-ssl3-method \
-      no-seed no-weak-ssl-ciphers -Wa,--noexecstack && \
+      no-seed enable-weak-ssl-ciphers -Wa,--noexecstack && \
     make && \
     make install_sw
 
