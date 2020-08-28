@@ -8,11 +8,11 @@ ENV OPENSSL_VERSION=1.1.1g
 RUN apk add curl && \
     curl -sLO https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
     tar xvfz "openssl-${OPENSSL_VERSION}.tar.gz" && \
-    cd "openssl-${OPENSSL_VERSION}" && \
     apk del openssl
 
 # OpenSSL configuration borrowed from Alpine's own package https://git.alpinelinux.org/aports/tree/main/openssl/APKBUILD
-RUN ./Configure \
+RUN cd "openssl-${OPENSSL_VERSION}" && \
+    ./Configure \
       --prefix=/usr \
       --libdir=lib \
       --openssldir=/etc/ssl \
