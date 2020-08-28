@@ -17,9 +17,8 @@ RUN cd "openssl-${OPENSSL_VERSION}" && \
       --libdir=lib \
       --openssldir=/etc/ssl \
       shared no-zlib \
-      no-async no-comp no-idea no-mdc2 no-rc5 no-ec2m \
-      no-sm2 no-sm4 enable-ssl2 enable-ssl3 no-seed \
-      no-weak-ssl-ciphers -Wa,--noexecstack && \
+      no-async no-comp enable-ssl3 enable-ssl3-method \
+      no-seed no-weak-ssl-ciphers -Wa,--noexecstack && \
     make && \
     make install_sw
 
