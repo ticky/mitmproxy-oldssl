@@ -19,7 +19,9 @@ RUN cd "openssl-${OPENSSL_VERSION}" && \
       shared no-zlib \
       no-async no-comp no-idea no-mdc2 no-rc5 no-ec2m \
       no-sm2 no-sm4 no-ssl2 no-ssl3 no-seed \
-      no-weak-ssl-ciphers -Wa,--noexecstack
+      no-weak-ssl-ciphers -Wa,--noexecstack && \
+    make && \
+    make install
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
