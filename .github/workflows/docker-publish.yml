@@ -14,7 +14,7 @@ on:
   pull_request:
 
 env:
-  IMAGE_NAME: ffmpegfs
+  IMAGE_NAME: mitmproxy-oldssl
 
 jobs:
   # Run tests.

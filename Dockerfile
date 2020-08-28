@@ -1,18 +1,27 @@
-# ffmpegfs in Docker
-
-FROM ubuntu:20.04
+FROM mitmproxy/mitmproxy:latest
 MAINTAINER  Jessica Stokes <hello@jessicastokes.net>
 
-WORKDIR     /tmp/workdir
+WORKDIR /tmp/workdir
 
-RUN     apt-get -yqq update && \
-        apt-get install -yq --no-install-recommends \
-            ffmpegfs \
-            fuse && \
-        apt-get autoremove -y && \
-        apt-get clean -y
+ENV OPENSSL_VERSION=1.1.1g
 
-CMD         ["--help"]
-ENTRYPOINT  ["ffmpegfs"]
+RUN curl -sLO https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
+    tar xvfz "openssl-${OPENSSL_VERSION}.tar.gz" && \
+    cd "openssl-${OPENSSL_VERSION}" && \
+    apk del openssl
 
-RUN     rm -rf /var/lib/apt/lists/*
+# OpenSSL configuration borrowed from Alpine's own package https://git.alpinelinux.org/aports/tree/main/openssl/APKBUILD
+RUN ./Configure \
+      --prefix=/usr \
+      --libdir=lib \
+      --openssldir=/etc/ssl \
+      shared no-zlib \
+      no-async no-comp no-idea no-mdc2 no-rc5 no-ec2m \
+      no-sm2 no-sm4 no-ssl2 no-ssl3 no-seed \
+      no-weak-ssl-ciphers -Wa,--noexecstack
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 8080 8081
+
+CMD ["mitmproxy"]
