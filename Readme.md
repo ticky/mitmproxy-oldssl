@@ -1,6 +1,6 @@
 # mitmproxy in Docker, with SSLv3 available
 
-Docker image of mitmproxy with OpenSSL reconfigured to enable SSLv3; can be configured to act as an SSL downgrade proxy for old machines.
+[Docker image of mitmproxy](https://github.com/mitmproxy/mitmproxy/tree/master/release/docker) with OpenSSL reconfigured to enable SSLv3; can be configured to act as an SSL downgrade proxy for old machines.
 
 ## Warnings up front
 
