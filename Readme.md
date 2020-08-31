@@ -18,4 +18,22 @@ I have a [PowerBook G4](https://en.wikipedia.org/wiki/PowerBook_G4#Titanium_Powe
 
 My plan is to run this, exposed only to my internal network, as an opt-in proxy for older machines, with a configuration set to allow older protocols on the client side, but to request newer protocols and ciphers on the server side, effectively upgrading the SSL support of the older machines. I'm also pondering a hardware solution which would enable the entire low-security attack vector to reside within a single, short ethernet cable.
 
-One important thing not included (yet?) in this repository is a mitmproxy plugin I've written which lets it validate server certificates even if the client itself doesn't support [Server Name Indication](https://en.wikipedia.org/wiki/Server_Name_Indication). SNI has become a vital component of the modern web, being the magic which makes TLS work on virtual hosts, and older browsers simply do not implement it. Thus, this mitmproxy image will not, out of the box, do everything you need to get old browsers browsing the current web. I am at this point still mulling over the merits of sharing that.
+## Additional pieces of the puzzle
+
+### SNI
+
+One other thing included in this repository is `unsafe_sni.py`, a mitmproxy addon I've written which lets it validate server certificates even if the client itself doesn't support [Server Name Indication](https://en.wikipedia.org/wiki/Server_Name_Indication). SNI has become a vital component of the modern web, being the magic which makes TLS work on virtual hosts, and older browsers simply do not implement it.
+
+It is worth noting that this addon is not safe and may expose your traffic to redirection to an untrusted server by anyone who happens to share a network with your client and/or server.
+
+Thus, this mitmproxy image will not, out of the box, do everything you need to get old browsers browsing the current web. You will need to place this in your mitmproxy configuration directory, and configure mitmproxy to load it.
+
+### Signature Digest Algorithms
+
+Older browsers do not support the modern web's sha256-based signature digest algorithms, resulting in many of them not being able to talk to modern TLS secured websites even if they could hypothetically present a cipher suite the server accepted. One thing this needs to do to enable these older browsers is downgrade the signature digest algorithm used by mitmproxy.
+
+Unfortunately, mitmproxy does not expose this as a configurable setting, and addons are loaded too late in the process for them to effect the generation of the root certificates. I am investigating options to fix this.
+
+### Internet Explorer for Macintosh 5.1 and the weird HTTPS re-requests
+
+My primary target browser for all this nonsense is IE for Mac 5.1, which has a very narrow window of cipher suites and SSL versions (SSLv3 is the newest it supports, and with only RC4-MD5 and antother cipher for your troubles, AND it only supports signature digests in sha1 or md5). Having managed to force the downgrade of the digest algorithm to sha1, I now have the problem that it doesn't like the answers it gets to HTTP requests. This is going to require some more investigation!
